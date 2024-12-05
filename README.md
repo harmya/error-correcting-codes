@@ -1,6 +1,6 @@
 ### Implementation of algorithms for error correction codes
 
-Use huffman encoding to compress and decompress data. Implement error correcting codes for this encoded data and verify by randomly flipping bits in the encoded data.
+Use huffman encoding to compress and decompress data. Implement error correcting codes for this encoded data and verify by randomly flipping bits in the encoded data. I am still working on implementing the error correction. Will implement Parity, Triple modular redundancy, Hamming Codes, Extended Hamming Codes, RSC
 
 ### Updates
 
