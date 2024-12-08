@@ -2,7 +2,7 @@
 
 Use huffman encoding to compress and decompress data. Implement error correcting codes for this encoded data and verify by randomly flipping bits in the encoded data. I am still working on implementing the error correction. Will implement Parity, Triple modular redundancy, Hamming Codes, Extended Hamming Codes, RSC
 
-### Current implementation
+### Setuo
 
 Imagine you some vocabulary declared like this:
 
@@ -32,4 +32,12 @@ Encoded Message: 111100100111011110100101011100010001011100001011111000111111011
 
 After receving the message and the table, we first decode the table, then we decode the message using the table.
 
-Now implementing parity bit error correction
+### Parity Bit
+Most naive method. Can only help in knowing IF an error occurred not WHERE it occurred.
+During encoding: just add a 0 or 1 at the start of the message to make sure that the number of ones in the message is even
+During decoding: check if number of ones is even, if not then error, otherwise good
+
+### Triple modular redundancy
+Still kinda naive. We just repeat the message 3 times.
+During encoding: repeat the message three times
+During decoding: divide the message in chunks of three, check if each bit matches across all three. If not, then vote 2/3 for the value of that bit.
