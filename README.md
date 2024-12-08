@@ -32,4 +32,4 @@ Encoded Message: 111100100111011110100101011100010001011100001011111000111111011
 
 After receving the message and the table, we first decode the table, then we decode the message using the table.
 
-Now implementing parity bit error correction:
+Now implementing parity bit error correction
