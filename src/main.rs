@@ -2,9 +2,11 @@ use huffman::HuffmanEncoding;
 
 pub mod huffman;
 
-const VOCAB: [&str; 7] = ["hello", "diya", "how", "are", "you", " ", "#"];
+const VOCAB: [&str; 12] = [
+    "hello", "diya", "how", "are", "you", " ", "#", "mikail", "saad", "sagar", "is", "stupid",
+];
 
-const MESSAGE: &str = "hello diya how are you#";
+const MESSAGE: &str = "mikail is stupid#";
 
 fn main() {
     let hf = HuffmanEncoding::new(&VOCAB);
