@@ -1,3 +1,4 @@
+use core::num;
 use std::cmp;
 use std::cmp::Reverse;
 use std::collections::BinaryHeap;
@@ -42,6 +43,12 @@ impl HuffmanNode {
 #[derive(Debug)]
 pub struct HuffmanEncoding {
     pub encoding: HashMap<char, String>,
+    pub max_size: usize,
+}
+
+#[derive(Debug)]
+pub struct HuffmanDecoding {
+    pub decoding: HashMap<String, char>,
     pub max_size: usize,
 }
 
@@ -103,7 +110,15 @@ impl HuffmanEncoding {
         let bits_req = (hf.max_size.ilog2() + 1) as usize;
 
         for (k, v) in hf.encoding {
-            let num_alphabet = (k as usize) - 97;
+            let mut num_alphabet = k as usize;
+            if num_alphabet == 32 {
+                num_alphabet = 27;
+            } else if num_alphabet == 35 {
+                num_alphabet = 28;
+            } else {
+                num_alphabet = num_alphabet - 97;
+            }
+
             let binary_string = format!("{:0>width$b}", num_alphabet, width = 5);
             to_send.push_str(&binary_string);
 
@@ -116,13 +131,13 @@ impl HuffmanEncoding {
         return to_send;
     }
 
-    pub fn decode_table(s: &str) -> Option<HuffmanEncoding> {
+    pub fn decode_table(s: &str) -> Option<HuffmanDecoding> {
         if s.is_empty() {
             return None;
         }
 
-        let mut hf = HuffmanEncoding {
-            encoding: HashMap::new(),
+        let mut hf = HuffmanDecoding {
+            decoding: HashMap::new(),
             max_size: 0,
         };
 
@@ -155,7 +170,14 @@ impl HuffmanEncoding {
             let string = str_bits.chars().collect::<String>();
             index += bits_to_read;
 
-            hf.encoding.insert((number as u8 + b'a') as char, string);
+            let mut char_to_insert = '#';
+            if number == 27 {
+                char_to_insert = ' ';
+            } else if number <= 26 {
+                char_to_insert = (number as u8 + b'a') as char;
+            }
+
+            hf.decoding.insert(string, char_to_insert);
 
             // Ensure you don't go out of bounds
             if index >= s.len() {
