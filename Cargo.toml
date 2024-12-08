@@ -4,3 +4,12 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
+
+
+[[bin]]
+name = "sender"
+path = "src/sender.rs"
+
+[[bin]]
+name = "receiver"
+path = "src/main.rs"
