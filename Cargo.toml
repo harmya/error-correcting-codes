@@ -12,4 +12,4 @@ path = "src/sender.rs"
 
 [[bin]]
 name = "receiver"
-path = "src/main.rs"
+path = "src/receiver.rs"
