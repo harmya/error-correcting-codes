@@ -4,6 +4,7 @@ use std::net::TcpStream;
 
 use huffman::HuffmanEncoding;
 
+pub mod correction;
 pub mod huffman;
 
 const VALID_WORDS: [&str; 12] = [
