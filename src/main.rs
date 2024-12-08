@@ -2,12 +2,7 @@ use huffman::HuffmanEncoding;
 
 pub mod huffman;
 
-const VOCAB: [&str; 37] = [
-    "bake", "fade", "cake", "dial", "file", "bead", "heal", "leaf", "held", "jade", "face", "back",
-    "beak", "bike", "flake", "head", "hike", "like", "dale", "lake", "deal", "lied", "idle",
-    "acid", "chide", "flail", "kale", "behalf", "flake", "life", "hello", "diya", "how", "are",
-    "you", " ", "#",
-];
+const VOCAB: [&str; 7] = ["hello", "diya", "how", "are", "you", " ", "#"];
 
 const MESSAGE: &str = "hello diya how are you#";
 
