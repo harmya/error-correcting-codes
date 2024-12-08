@@ -10,6 +10,8 @@ const MESSAGE: &str = "mikail is stupid#";
 
 fn main() {
     let hf = HuffmanEncoding::new(&VOCAB);
+    println!("Encoding Table: {:?}", hf);
+
     let mut encoded_message: String = "".to_string();
 
     for char in MESSAGE.chars() {
