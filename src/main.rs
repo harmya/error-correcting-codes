@@ -1,6 +1,7 @@
 use huffman::HuffmanEncoding;
 
 pub mod huffman;
+pub mod parity;
 
 const VOCAB: [&str; 12] = [
     "hello", "diya", "how", "are", "you", " ", "#", "mikail", "saad", "sagar", "is", "stupid",

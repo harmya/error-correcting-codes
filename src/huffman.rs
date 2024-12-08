@@ -186,3 +186,51 @@ impl HuffmanEncoding {
         return Some(hf);
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_huffman_encoding_creation() {
+        let words = vec!["hello", "world"];
+        let encoding = HuffmanEncoding::new(&words);
+        assert!(encoding.encoding.contains_key(&'h'));
+        assert!(encoding.encoding.contains_key(&'e'));
+        assert!(encoding.encoding.contains_key(&'l'));
+        assert!(encoding.encoding.contains_key(&'o'));
+        assert!(encoding.encoding.contains_key(&'w'));
+        assert!(encoding.encoding.contains_key(&'r'));
+        assert!(encoding.encoding.contains_key(&'d'));
+        assert_eq!(encoding.max_size > 0, true);
+    }
+
+    #[test]
+    fn test_huffman_empty_decode_table() {
+        let decoded_table = HuffmanEncoding::decode_table("");
+        assert!(decoded_table.is_none());
+    }
+
+    #[test]
+    fn test_huffman_save_encoding() {
+        let words = vec!["hello"];
+        let encoding = HuffmanEncoding::new(&words);
+        assert!(encoding.encoding.contains_key(&'h'));
+        assert!(encoding.encoding.contains_key(&'e'));
+        assert!(encoding.encoding.contains_key(&'l'));
+        assert!(encoding.encoding.contains_key(&'o'));
+    }
+
+    #[test]
+    fn test_huffman_complex_words() {
+        let words = vec!["rustacean", "hello", "world"];
+        let encoding = HuffmanEncoding::new(&words);
+
+        for word in words {
+            for char in word.chars() {
+                assert!(encoding.encoding.contains_key(&char));
+            }
+        }
+        assert!(encoding.max_size > 0);
+    }
+}
