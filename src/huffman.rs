@@ -97,7 +97,7 @@ impl HuffmanEncoding {
         return map;
     }
 
-    pub fn encode_table(hf: HuffmanEncoding) -> String {
+    pub fn encode_table(hf: &HuffmanEncoding) -> String {
         /* this sends data in chunks of 5 + max_size.
          * Count all the zeros until I hit a 1. That the my max_size.
          * After that 1, read in chunks of 5 + max_size to get the alphabet and its encoding
@@ -108,8 +108,8 @@ impl HuffmanEncoding {
         let mut to_send = String::from(format!("{}1", "0".repeat(hf.max_size)));
         let bits_req = (hf.max_size.ilog2() + 1) as usize;
 
-        for (k, v) in hf.encoding {
-            let mut num_alphabet = k as usize;
+        for (k, v) in &hf.encoding {
+            let mut num_alphabet = *k as usize;
             if num_alphabet == 32 {
                 num_alphabet = 27;
             } else if num_alphabet == 35 {
