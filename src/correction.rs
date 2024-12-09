@@ -92,7 +92,7 @@ pub fn encode_correction(
 ) -> (bool, String) {
     match correction_type {
         CorrectionType::Parity => encode_parity_bit(encoded_string),
-        CorrectionType::Triple => todo!(),
+        CorrectionType::Triple => encode_triple(encoded_string),
         CorrectionType::Hamming => todo!(),
     }
 }
@@ -103,7 +103,7 @@ pub fn decode_correction(
 ) -> (bool, String) {
     match correction_type {
         CorrectionType::Parity => decode_parity_bit(encoded_string),
-        CorrectionType::Triple => todo!(),
+        CorrectionType::Triple => decode_triple(encoded_string),
         CorrectionType::Hamming => todo!(),
     }
 }
@@ -173,5 +173,61 @@ mod tests {
         let input = String::from("111101");
         let expected = (false, String::from("STOP! Found error in message"));
         assert_eq!(decode_correction(CorrectionType::Parity, input), expected);
+    }
+
+    #[test]
+    fn test_encode_triple() {
+        let input = String::from("111101");
+        let expected = (true, String::from("000000110111101111101111101"));
+        assert_eq!(encode_triple(input), expected);
+    }
+
+    #[test]
+    fn test_encode_correction_with_triple() {
+        let input = String::from("111101");
+        let expected = (true, String::from("000000110111101111101111101"));
+        assert_eq!(encode_correction(CorrectionType::Triple, input), expected);
+    }
+
+    #[test]
+    fn test_decode_triple_without_flip() {
+        let input = String::from("000000110111101111101111101");
+        let expected = (true, String::from("111101"));
+        assert_eq!(decode_triple(input), expected);
+    }
+
+    #[test]
+    fn test_decode_triple_with_one_flip() {
+        let input = String::from("000000110111101111101111100");
+        let expected = (true, String::from("111101"));
+        assert_eq!(decode_triple(input), expected);
+    }
+
+    #[test]
+    fn test_decode_triple_with_two_flip() {
+        let input = String::from("000000110101101111111111101");
+        let expected = (true, String::from("111101"));
+        assert_eq!(decode_triple(input), expected);
+    }
+
+    #[test]
+    fn test_decode_correction_with_triple_without_flip() {
+        let input = String::from("000000110111101111101111101");
+        let expected = (true, String::from("111101"));
+        assert_eq!(decode_correction(CorrectionType::Triple, input), expected);
+    }
+
+    #[test]
+    fn test_decode_correction_with_triple_with_one_flip() {
+        let input = String::from("000000110111101111101111100");
+        let expected = (true, String::from("111101"));
+        assert_eq!(decode_correction(CorrectionType::Triple, input), expected);
+    }
+
+    #[test]
+    fn test_decode_correction_with_triple_with_two_flip() {
+        let input = String::from("000000110111101111101111110");
+        let expected = (true, String::from("111101"));
+        assert_eq!(decode_correction(CorrectionType::Triple, input), expected);
     }
 }
