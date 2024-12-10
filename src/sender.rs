@@ -6,9 +6,11 @@ use huffman::HuffmanEncoding;
 
 pub mod correction;
 pub mod huffman;
+pub mod noise;
 
-const VALID_WORDS: [&str; 12] = [
+const VALID_WORDS: [&str; 13] = [
     "hello", "diya", "how", "are", "you", " ", "#", "mikail", "saad", "sagar", "is", "stupid",
+    "william",
 ];
 
 fn uses_valid_vocab(message: &str, vocab: &HashSet<&str>) -> bool {
@@ -70,7 +72,7 @@ fn main() -> std::io::Result<()> {
         let encoded_message = encode_message(&input, &hf);
         println!("Encoded Message: {}", encoded_message);
 
-        stream.write_all(encoded_message.as_bytes()).unwrap();
+        let error_encoded_message = stream.write_all(encoded_message.as_bytes()).unwrap();
 
         let mut buffer = [0; 512];
         match stream.read(&mut buffer) {
