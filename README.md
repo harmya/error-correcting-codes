@@ -30,7 +30,11 @@ Now, using this we can encode the message as:
 Encoded Message: 111100100111011110100101011100010001011100001011111000111111011000111111001
 ```
 
-After receving the message and the table, we first decode the table, then we decode the message using the table.
+Now the sender sends this to the receiver (server)
+
+**TO-DO**: Add a channel in between them to simulate random bit flips (currently, its brain dead flipping of bits before I send it to simulate noise)
+
+After receving the message and the table, we first decode the table, then we decode the message using the table in the receiver. (We send the table ONCE at the start when the server receives a connection)
 
 ### Parity Bit
 Most naive method. Can only help in knowing IF an error occurred not WHERE it occurred.
@@ -41,3 +45,12 @@ During decoding: check if number of ones is even, if not then error, otherwise g
 Still kinda naive. We just repeat the message 3 times.
 During encoding: repeat the message three times
 During decoding: divide the message in chunks of three, check if each bit matches across all three. If not, then vote 2/3 for the value of that bit.
+
+### Hamming Code
+Still working on this
+
+### Extended Hamming Code
+ToDo
+
+### Reed Soloman Code
+Todo
