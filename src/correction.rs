@@ -86,6 +86,20 @@ pub fn decode_triple(encoded_string: String) -> (bool, String) {
     return (true, final_string);
 }
 
+pub fn encode_hamming(encoded_string: String) -> (bool, String) {
+    let zero_index: String = "11111110".to_string();
+
+    let message_length = encoded_string.len();
+
+    if message_length >= 511 {
+        return (
+            false,
+            "Exceeded the length of allowed message size".to_string(),
+        );
+    }
+
+    return (true, "".to_string());
+}
 pub fn encode_correction(
     correction_type: CorrectionType,
     encoded_string: String,
