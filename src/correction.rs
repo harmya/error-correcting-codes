@@ -91,13 +91,15 @@ pub fn encode_hamming(encoded_string: String) -> (bool, String) {
 
     let message_length = encoded_string.len();
 
-    if message_length >= 511 {
+    if message_length >= 502 {
         return (
             false,
             "Exceeded the length of allowed message size".to_string(),
         );
     }
 
+    let num_parity_bits = message_length.ilog2() + 1;
+    println!("Number of parity bits {}", num_parity_bits);
     return (true, "".to_string());
 }
 pub fn encode_correction(
@@ -107,7 +109,7 @@ pub fn encode_correction(
     match correction_type {
         CorrectionType::Parity => encode_parity_bit(encoded_string),
         CorrectionType::Triple => encode_triple(encoded_string),
-        CorrectionType::Hamming => todo!(),
+        CorrectionType::Hamming => encode_hamming(encoded_string),
     }
 }
 
@@ -243,5 +245,12 @@ mod tests {
         let input = String::from("000000110111101111101111110");
         let expected = (true, String::from("111101"));
         assert_eq!(decode_correction(CorrectionType::Triple, input), expected);
+    }
+
+    #[test]
+    fn test_encode_hamming() {
+        let input = String::from("000000110111101111101111110");
+        let expected = (true, String::from(""));
+        assert_eq!(encode_correction(CorrectionType::Hamming, input), expected);
     }
 }
