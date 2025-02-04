@@ -71,8 +71,6 @@ fn handle_client(mut stream: TcpStream) {
             );
         } else if error_decoded_message_values.0 {
             println!("Found errors in message and corrected them!");
-            println!("Wrong {}", error_decoded_message_values.2);
-            println!("Correct {}", error_decoded_message_values.3);
             println!(
                 "Message if there was no correction: {}",
                 decode_message(&error_decoded_message_values.2, &decoding_table)
@@ -95,9 +93,8 @@ fn handle_client(mut stream: TcpStream) {
             decoded_message_to_send = "Encoding Table not sent :(".to_string();
         }
 
-        stream
-            .write_all(decoded_message_to_send.as_bytes())
-            .expect("Failed to send response");
+        let response = decoded_message_to_send.as_bytes();
+        stream.write_all(response).expect("Failed to send response");
     }
 }
 

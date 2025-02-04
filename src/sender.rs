@@ -10,9 +10,12 @@ pub mod correction;
 pub mod huffman;
 pub mod noise;
 
-const VALID_WORDS: [&str; 14] = [
+const VALID_WORDS: [&str; 51] = [
     "hello", "diya", "how", "are", "you", " ", "#", "mikail", "saad", "sagar", "is", "stupid",
-    "sarthak", "so",
+    "sarthak", "so", "the", "quick", "brown", "fox", "jumps", "over", "lazy", "dog", "and", "runs",
+    "fast", "because", "it", "can", "not", "stop", "now", "he", "thinks", "she", "wants", "to",
+    "play", "outside", "but", "rains", "hard", "today", "they", "love", "eating", "pizza",
+    "watching", "movies", "coding", "fun", "always",
 ];
 
 fn uses_valid_vocab(message: &str, vocab: &HashSet<&str>) -> bool {
@@ -64,8 +67,6 @@ fn main() -> std::io::Result<()> {
             continue;
         }
 
-        let input = format!("{}#", input);
-
         if input.eq_ignore_ascii_case("exit") {
             println!("Exiting...");
             break;
@@ -98,7 +99,6 @@ fn main() -> std::io::Result<()> {
                 }
                 "3" => {
                     correction_type = CorrectionType::Hamming;
-                    stream.write_all("H".as_bytes()).unwrap();
                     type_to_append = 'H';
                     break;
                 }
