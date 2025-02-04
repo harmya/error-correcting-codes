@@ -158,7 +158,6 @@ pub fn decode_hamming(received_code: &String, is_extended: bool) -> (bool, bool,
         let mut parity = 0;
 
         for bit in (parity_pos..=total_length).step_by(2 * parity_pos) {
-            println!("bit {}", bit);
             for k in 0..parity_pos {
                 if bit + k - 1 <= total_length - 1 {
                     parity ^= (hamming_code[bit + k - 1] as u8 - b'0') as i32;
@@ -166,17 +165,11 @@ pub fn decode_hamming(received_code: &String, is_extended: bool) -> (bool, bool,
             }
         }
 
-        println!("Parity found{}", parity);
-
         if parity % 2 != 0 {
-            println!("Parity pos{}", parity_pos);
             curr_error_position += parity_pos;
         }
-
-        println!();
     }
     let mut has_double_error = false;
-    println!("{}", curr_error_position);
     if curr_error_position > 0 {
         let idx = curr_error_position - 1;
 
