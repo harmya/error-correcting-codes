@@ -2,7 +2,7 @@ use std::collections::HashSet;
 use std::io::{self, Read, Write};
 use std::net::TcpStream;
 
-use correction::encode_correction;
+use correction::{encode_correction, CorrectionType};
 use huffman::HuffmanEncoding;
 use noise::add_noise;
 
@@ -71,20 +71,47 @@ fn main() -> std::io::Result<()> {
             break;
         }
 
+        let correction_type: CorrectionType;
+
+        loop {
+            println!("Choose error correction method:");
+            println!("1. Parity (Detects errors, no correction)");
+            println!("2. TPC (Corrects small errors, uses more space)");
+            println!("3. Hamming (Detects and corrects single-bit errors)");
+
+            let mut choice = String::new();
+            io::stdin()
+                .read_line(&mut choice)
+                .expect("Failed to read input");
+
+            match choice.trim() {
+                "1" => {
+                    correction_type = CorrectionType::Parity;
+                    break;
+                }
+                "2" => {
+                    correction_type = CorrectionType::Triple;
+                    break;
+                }
+                "3" => {
+                    correction_type = CorrectionType::Hamming;
+                    break;
+                }
+                _ => println!("Invalid choice. Please enter 1, 2, or 3."),
+            }
+        }
+
         let encoded_message = encode_message(&input, &hf);
         println!("Encoded Message: {}", encoded_message);
 
-        let error_encoded_message =
-            encode_correction(correction::CorrectionType::Triple, &encoded_message);
+        let error_encoded_message = encode_correction(&correction_type, &encoded_message);
 
         println!(
             "Error Resistant Encoded Message: {}",
             error_encoded_message.1
         );
 
-        // add noise
-        let add_noise_to_message =
-            add_noise(error_encoded_message.1, correction::CorrectionType::Triple);
+        let add_noise_to_message = add_noise(error_encoded_message.1, &correction_type);
 
         println!("Adding noise to the message, flipping a random bit");
 

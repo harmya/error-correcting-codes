@@ -217,7 +217,7 @@ pub fn decode_hamming(received_code: &String, is_extended: bool) -> (bool, bool,
     )
 }
 pub fn encode_correction(
-    correction_type: CorrectionType,
+    correction_type: &CorrectionType,
     encoded_string: &String,
 ) -> (bool, String) {
     match correction_type {
@@ -247,14 +247,14 @@ mod tests {
     fn test_encode_parity_bit_even_ones() {
         let input = String::from("1100");
         let expected = (true, String::from("01100"));
-        assert_eq!(encode_correction(CorrectionType::Parity, &input), expected);
+        assert_eq!(encode_correction(&CorrectionType::Parity, &input), expected);
     }
 
     #[test]
     fn test_encode_parity_bit_odd_ones() {
         let input = String::from("1101");
         let expected = (true, String::from("11101"));
-        assert_eq!(encode_correction(CorrectionType::Parity, &input), expected);
+        assert_eq!(encode_correction(&CorrectionType::Parity, &input), expected);
     }
 
     #[test]
@@ -282,7 +282,7 @@ mod tests {
     fn test_encode_triple() {
         let input = String::from("111101");
         let expected = (true, String::from("000000110111101111101111101"));
-        assert_eq!(encode_correction(CorrectionType::Triple, &input), expected);
+        assert_eq!(encode_correction(&CorrectionType::Triple, &input), expected);
     }
 
     #[test]
@@ -320,7 +320,10 @@ mod tests {
     fn test_encode_hamming_one() {
         let input = String::from("11101");
         let expected = (true, String::from("101011011"));
-        assert_eq!(encode_correction(CorrectionType::Hamming, &input), expected);
+        assert_eq!(
+            encode_correction(&CorrectionType::Hamming, &input),
+            expected
+        );
     }
 
     #[test]
@@ -348,27 +351,33 @@ mod tests {
     fn test_empty_string_parity() {
         let input = String::from("");
         let expected = (true, String::from("0")); // Encodes as "0"
-        assert_eq!(encode_correction(CorrectionType::Parity, &input), expected);
+        assert_eq!(encode_correction(&CorrectionType::Parity, &input), expected);
     }
 
     #[test]
     fn test_empty_string_hamming() {
         let input = String::from("");
         let expected = (true, String::from("")); // No encoding needed
-        assert_eq!(encode_correction(CorrectionType::Hamming, &input), expected);
+        assert_eq!(
+            encode_correction(&CorrectionType::Hamming, &input),
+            expected
+        );
     }
 
     #[test]
     fn test_single_bit_message() {
         let input = String::from("1");
         let expected = (true, String::from("111"));
-        assert_eq!(encode_correction(CorrectionType::Hamming, &input), expected);
+        assert_eq!(
+            encode_correction(&CorrectionType::Hamming, &input),
+            expected
+        );
     }
 
     #[test]
     fn test_large_message_triple_encoding() {
         let input = "1010101010".repeat(20); // Large input
-        let result = encode_correction(CorrectionType::Triple, &input);
+        let result = encode_correction(&CorrectionType::Triple, &input);
         assert!(result.0, "Encoding failed for a large message");
         assert!(
             result.1.len() > input.len(),
@@ -379,7 +388,7 @@ mod tests {
     #[test]
     fn test_large_message_hamming_encoding() {
         let input = "11001100".repeat(20); // Large input
-        let result = encode_correction(CorrectionType::Hamming, &input);
+        let result = encode_correction(&CorrectionType::Hamming, &input);
         assert!(result.0, "Encoding failed for a large message");
         assert!(
             result.1.len() > input.len(),

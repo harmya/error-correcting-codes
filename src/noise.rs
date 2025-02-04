@@ -2,7 +2,7 @@ use rand::Rng;
 
 use crate::correction::CorrectionType;
 
-pub fn add_noise(message: String, correction_type: CorrectionType) -> String {
+pub fn add_noise(message: String, correction_type: &CorrectionType) -> String {
     let len_message = message.len();
     let mut rng = rand::thread_rng();
     let mut output = message.clone();
