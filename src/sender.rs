@@ -72,6 +72,7 @@ fn main() -> std::io::Result<()> {
         }
 
         let correction_type: CorrectionType;
+        let type_to_append: char;
 
         loop {
             println!("Choose error correction method:");
@@ -87,14 +88,18 @@ fn main() -> std::io::Result<()> {
             match choice.trim() {
                 "1" => {
                     correction_type = CorrectionType::Parity;
+                    type_to_append = 'P';
                     break;
                 }
                 "2" => {
                     correction_type = CorrectionType::Triple;
+                    type_to_append = 'T';
                     break;
                 }
                 "3" => {
                     correction_type = CorrectionType::Hamming;
+                    stream.write_all("H".as_bytes()).unwrap();
+                    type_to_append = 'H';
                     break;
                 }
                 _ => println!("Invalid choice. Please enter 1, 2, or 3."),
@@ -111,8 +116,8 @@ fn main() -> std::io::Result<()> {
             error_encoded_message.1
         );
 
-        let add_noise_to_message = add_noise(error_encoded_message.1, &correction_type);
-
+        let mut add_noise_to_message = add_noise(error_encoded_message.1, &correction_type);
+        add_noise_to_message.push(type_to_append);
         println!("Adding noise to the message, flipping a random bit");
 
         if error_encoded_message.0 {

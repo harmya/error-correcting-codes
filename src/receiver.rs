@@ -1,4 +1,4 @@
-use correction::decode_correction;
+use correction::{decode_correction, CorrectionType};
 use std::collections::HashMap;
 use std::io::{Read, Write};
 use std::net::{TcpListener, TcpStream};
@@ -47,6 +47,12 @@ fn handle_client(mut stream: TcpStream) {
         }
         let received_message = String::from_utf8_lossy(&buffer[..bytes_read]);
         println!("Received: {}", received_message);
+        let last_char: char = received_message.chars().last().unwrap();
+        let correction_type = match last_char {
+            'P' => CorrectionType::Parity,
+            'T' => CorrectionType::Triple,
+            _ => CorrectionType::Hamming,
+        };
 
         if message_count == 0 {
             decoding_table = HuffmanEncoding::decode_table(&received_message).unwrap();
@@ -54,11 +60,8 @@ fn handle_client(mut stream: TcpStream) {
             continue;
         }
 
-        let error_decoded_message_values = decode_correction(
-            correction::CorrectionType::Triple,
-            &received_message.to_string(),
-            false,
-        );
+        let error_decoded_message_values =
+            decode_correction(correction_type, &received_message.to_string(), false);
 
         if error_decoded_message_values.0 && !error_decoded_message_values.1 {
             println!("Found errors in message but cannot correct them!");

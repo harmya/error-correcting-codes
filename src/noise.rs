@@ -9,7 +9,7 @@ pub fn add_noise(message: String, correction_type: &CorrectionType) -> String {
 
     match correction_type {
         CorrectionType::Parity => {
-            let where_to_flip = rng.gen_range(1..len_message - 1);
+            let where_to_flip = rng.gen_range(10..len_message - 1);
             flip_bit(&mut output, where_to_flip);
         }
         CorrectionType::Triple => {
@@ -18,7 +18,7 @@ pub fn add_noise(message: String, correction_type: &CorrectionType) -> String {
             }
 
             let x = rng.gen_range(1..=(len_message / 3));
-            let first_chunk_start = 10;
+            let first_chunk_start = 11;
             let first_chunk_end = len_message / 3;
             let num_bits_to_flip = x / 2;
 

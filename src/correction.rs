@@ -56,6 +56,15 @@ pub fn decode_triple(encoded_string: &String) -> (bool, bool, String, String) {
     let first_nine_bits = &encoded_string[..9];
     let length_of_message = usize::from_str_radix(first_nine_bits, 2).unwrap();
 
+    if encoded_string.len() < 9 + length_of_message * 3 {
+        println!(
+            "Error: Encoded string length ({}) is too short for expected message length ({})",
+            encoded_string.len(),
+            length_of_message
+        );
+        return (true, false, "".to_string(), "".to_string());
+    }
+
     let mut first_chunk: Vec<char> = encoded_string[9..9 + length_of_message].chars().collect();
     let second_chunk: Vec<char> = encoded_string[9 + length_of_message..9 + length_of_message * 2]
         .chars()
