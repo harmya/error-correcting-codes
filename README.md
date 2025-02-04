@@ -7,15 +7,16 @@ Use huffman encoding to compress and decompress data. Implement error correcting
 Imagine you some vocabulary declared like this:
 
 ```rust
-const VOCAB: [&str; 12] = [
-    "hello", "diya", "how", "are", "you", "mikail", "saad", "sagar", "is", "stupid", " ", "#",
+const VALID_WORDS: [&str; 13] = [
+    "hello", "how", "are", "you", " ", "#", "mikail", "saad", "sagar", "is", "sarthak", "so",
+    "cooked",
 ];
 ```
 
 You can encode a message like this:
 
 ```rust
-let message = "hello diya how are you";
+let message = "hello how are you";
 ```
 
 We can use the vocabulary to design a huffman encoding table that we can send as a part of the message:
@@ -30,9 +31,19 @@ Now, using this we can encode the message as:
 Encoded Message: 111100100111011110100101011100010001011100001011111000111111011000111111001
 ```
 
-Now the sender sends this to the receiver (server)
+Then, we can select what error correction strategy we want to use:
+```
+Choose error correction method:
+1. Parity (Detects errors, no correction)
+2. TPC (Corrects small errors, uses more space)
+3. Hamming (Detects and corrects single-bit errors)
+```
+Now, based on the selected strategy, we add noise to the data in the follwing way:
+1. Parity: Flip a random bit
+2. TPC: Select the first chunk. Generate a random number k between 1 and length / 2. Randomly select and flip k bits.
+3. Hamming: Select a number between 1 and 2. Flip those number of bits.
 
-**TO-DO**: Add a channel in between them to simulate random bit flips (currently, its brain dead flipping of bits before I send it to simulate noise)
+Now the sender sends this to the receiver (server)
 
 After receving the message and the table, we first decode the table, then we decode the message using the table in the receiver. (We send the table ONCE at the start when the server receives a connection)
 
@@ -47,10 +58,14 @@ During encoding: repeat the message three times
 During decoding: divide the message in chunks of three, check if each bit matches across all three. If not, then vote 2/3 for the value of that bit.
 
 ### Hamming Code
-Still working on this
+For ocating 1 bit errors. By just using 9 extra bits for a message of length ~500, we can detect and correct 1 bit errors. 
+During encoding: Construct an empty message size of length m + parity bits p such that 2^p >= p + m. Now, let the parity bits be p1, p2, p3...Then, p1 makes sure that the parity of every bit location which has 1 in the 1st place (least significant) is even, p2 makes sure that the parity of every bit location which has 1 in the 2nd place (least significant) is even and so on. 
+During decoding: Re-check the parity bits similar to the encoding. Keep track of the how many parity bits show error and then add them. Why add? Consider p1 bit is wrong, then I know that some bit with a 1 in the 1st place is wrong, and then if p2 is wrong, I also know that some bit with 1 in the 2nd place is wrong. Hence, the incorrect bit should x...xx11. 
 
 ### Extended Hamming Code
-ToDo
+Same as hamming code with a difference: can detect but not correct double bit errors. 
+During encoding: We use a 0th parity bit to store the parity of the entire message.
+During decoding: We first corect the 1 bit errors. Now, if the 0th bit's parity is still wrong, then there is a double bit error.
 
-### Reed Soloman Code
+### Reed Soloman Codes
 Todo
