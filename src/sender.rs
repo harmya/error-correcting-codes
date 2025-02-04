@@ -2,7 +2,9 @@ use std::collections::HashSet;
 use std::io::{self, Read, Write};
 use std::net::TcpStream;
 
+use correction::encode_correction;
 use huffman::HuffmanEncoding;
+use noise::add_noise;
 
 pub mod correction;
 pub mod huffman;
@@ -72,7 +74,25 @@ fn main() -> std::io::Result<()> {
         let encoded_message = encode_message(&input, &hf);
         println!("Encoded Message: {}", encoded_message);
 
-        let error_encoded_message = stream.write_all(encoded_message.as_bytes()).unwrap();
+        let error_encoded_message =
+            encode_correction(correction::CorrectionType::Triple, &encoded_message);
+
+        println!(
+            "Error Resistant Encoded Message: {}",
+            error_encoded_message.1
+        );
+
+        // add noise
+        let add_noise_to_message =
+            add_noise(error_encoded_message.1, correction::CorrectionType::Triple);
+
+        println!("Adding noise to the message, flipping a random bit");
+
+        if error_encoded_message.0 {
+            stream.write_all(add_noise_to_message.as_bytes()).unwrap();
+        } else {
+            println!("Error in encoding the message with error correcting codes")
+        }
 
         let mut buffer = [0; 512];
         match stream.read(&mut buffer) {

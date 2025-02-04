@@ -2,12 +2,12 @@ use rand::Rng;
 
 use crate::correction::CorrectionType;
 
-pub fn add_noise(mut message: String, correction_type: CorrectionType) -> String {
+pub fn add_noise(message: String, correction_type: CorrectionType) -> String {
     let len_message = message.len();
 
     let where_to_flip = match correction_type {
         CorrectionType::Parity => rand::thread_rng().gen_range(1..len_message - 1),
-        CorrectionType::Triple => todo!(),
+        CorrectionType::Triple => rand::thread_rng().gen_range(1..len_message - 1),
         CorrectionType::Hamming => todo!(),
     };
 

@@ -1,9 +1,11 @@
+use correction::decode_correction;
 use std::collections::HashMap;
 use std::io::{Read, Write};
 use std::net::{TcpListener, TcpStream};
 
 use huffman::{HuffmanDecoding, HuffmanEncoding};
 
+pub mod correction;
 pub mod huffman;
 
 fn decode_message(message: &str, hd: &HuffmanDecoding) -> String {
@@ -11,7 +13,7 @@ fn decode_message(message: &str, hd: &HuffmanDecoding) -> String {
         return "".to_string();
     }
 
-    let mut decoded_string: String = "Your message is ".to_string();
+    let mut decoded_string: String = "".to_string();
 
     let mut left_ptr = 0;
     let mut right_ptr = 1;
@@ -52,7 +54,24 @@ fn handle_client(mut stream: TcpStream) {
             continue;
         }
 
-        let mut decoded_message = decode_message(&received_message, &decoding_table);
+        let error_decoded_message_values = decode_correction(
+            correction::CorrectionType::Triple,
+            &received_message.to_string(),
+            false,
+        );
+
+        if error_decoded_message_values.0 && error_decoded_message_values.1 {
+            println!("Found errors in message but cannot correct them!");
+            let decode_with_err = decode_message(&error_decoded_message_values.2, &decoding_table);
+            println!("Decoding with errors {}", decode_with_err);
+        } else if error_decoded_message_values.0 {
+            println!("Found errors in message and corrected them!");
+        } else {
+            println!("Found NO errors in message :)");
+        }
+
+        let mut decoded_message = decode_message(&error_decoded_message_values.2, &decoding_table);
+        println!("Final Error Decoded Message: {}", decoded_message);
 
         if decoded_message == "" {
             decoded_message = "Encoding Table not sent :(".to_string();
