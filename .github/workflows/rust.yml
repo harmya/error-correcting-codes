@@ -19,8 +19,5 @@ jobs:
     - name: Set up Rust
       uses: dtolnay/rust-toolchain@stable  # Ensures Rust toolchain is installed
 
-    - name: Run build
-      run: cargo build --verbose  # Compiles the Rust project
-
     - name: Run tests
       run: cargo test --verbose  # Runs the test suite
