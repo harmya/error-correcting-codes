@@ -13,7 +13,14 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
+    - name: Check out repository
+      uses: actions/checkout@v4  # Ensures the repository is available
+
+    - name: Set up Rust
+      uses: dtolnay/rust-toolchain@stable  # Ensures Rust toolchain is installed
+
     - name: Run build
-      run: cargo build --verbose
+      run: cargo build --verbose  # Compiles the Rust project
+
     - name: Run tests
-      run: cargo test --verbose
+      run: cargo test --verbose  # Runs the test suite
