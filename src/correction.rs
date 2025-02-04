@@ -297,8 +297,18 @@ mod tests {
 
     #[test]
     fn test_decode_triple_with_one_flip() {
-        let input = String::from("000000110111101111101111100"); // Error at the last bit
-        let expected = (true, true, String::from("111100"), String::from("111101"));
+        let input = String::from("000000110101101111101111101"); // Error in the first chunk
+        let expected = (true, true, String::from("101101"), String::from("111101"));
+        assert_eq!(
+            decode_correction(CorrectionType::Triple, &input, false),
+            expected
+        );
+    }
+
+    #[test]
+    fn test_decode_triple_with_two_flip() {
+        let input = String::from("000000110100101111101111101"); // Errors in the first chunk
+        let expected = (true, true, String::from("100101"), String::from("111101"));
         assert_eq!(
             decode_correction(CorrectionType::Triple, &input, false),
             expected
