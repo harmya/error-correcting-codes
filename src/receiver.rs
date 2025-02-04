@@ -60,25 +60,41 @@ fn handle_client(mut stream: TcpStream) {
             false,
         );
 
-        if error_decoded_message_values.0 && error_decoded_message_values.1 {
+        if error_decoded_message_values.0 && !error_decoded_message_values.1 {
             println!("Found errors in message but cannot correct them!");
-            let decode_with_err = decode_message(&error_decoded_message_values.2, &decoding_table);
-            println!("Decoding with errors {}", decode_with_err);
+            println!(
+                "Decoding with errors: {}",
+                decode_message(&error_decoded_message_values.3, &decoding_table)
+            );
         } else if error_decoded_message_values.0 {
             println!("Found errors in message and corrected them!");
+            println!("Wrong {}", error_decoded_message_values.2);
+            println!("Correct {}", error_decoded_message_values.3);
+            println!(
+                "Message if there was no correction: {}",
+                decode_message(&error_decoded_message_values.2, &decoding_table)
+            );
+            println!(
+                "Message after applying error correction: {}",
+                decode_message(&error_decoded_message_values.3, &decoding_table)
+            );
         } else {
             println!("Found NO errors in message :)");
+            println!(
+                "Decoding message: {}",
+                decode_message(&error_decoded_message_values.3, &decoding_table)
+            );
+        }
+        let mut decoded_message_to_send =
+            decode_message(&error_decoded_message_values.3, &decoding_table);
+
+        if decoded_message_to_send == "" {
+            decoded_message_to_send = "Encoding Table not sent :(".to_string();
         }
 
-        let mut decoded_message = decode_message(&error_decoded_message_values.2, &decoding_table);
-        println!("Final Error Decoded Message: {}", decoded_message);
-
-        if decoded_message == "" {
-            decoded_message = "Encoding Table not sent :(".to_string();
-        }
-
-        let response = decoded_message.as_bytes();
-        stream.write_all(response).expect("Failed to send response");
+        stream
+            .write_all(decoded_message_to_send.as_bytes())
+            .expect("Failed to send response");
     }
 }
 

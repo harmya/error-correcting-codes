@@ -10,9 +10,9 @@ pub mod correction;
 pub mod huffman;
 pub mod noise;
 
-const VALID_WORDS: [&str; 13] = [
+const VALID_WORDS: [&str; 14] = [
     "hello", "diya", "how", "are", "you", " ", "#", "mikail", "saad", "sagar", "is", "stupid",
-    "william",
+    "sarthak", "so",
 ];
 
 fn uses_valid_vocab(message: &str, vocab: &HashSet<&str>) -> bool {
