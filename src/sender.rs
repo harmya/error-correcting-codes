@@ -10,12 +10,9 @@ pub mod correction;
 pub mod huffman;
 pub mod noise;
 
-const VALID_WORDS: [&str; 51] = [
-    "hello", "diya", "how", "are", "you", " ", "#", "mikail", "saad", "sagar", "is", "stupid",
-    "sarthak", "so", "the", "quick", "brown", "fox", "jumps", "over", "lazy", "dog", "and", "runs",
-    "fast", "because", "it", "can", "not", "stop", "now", "he", "thinks", "she", "wants", "to",
-    "play", "outside", "but", "rains", "hard", "today", "they", "love", "eating", "pizza",
-    "watching", "movies", "coding", "fun", "always",
+const VALID_WORDS: [&str; 13] = [
+    "hello", "how", "are", "you", " ", "#", "mikail", "saad", "sagar", "is", "sarthak", "so",
+    "cooked",
 ];
 
 fn uses_valid_vocab(message: &str, vocab: &HashSet<&str>) -> bool {
